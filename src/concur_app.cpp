@@ -5,6 +5,7 @@
 #include <be/util/parse_numeric_string.hpp>
 #include <be/core/logging.hpp>
 #include <be/core/alg.hpp>
+#include <be/texi/read_image.hpp>
 #include <gli/gli.hpp>
 #include <stb/stb_image.h>
 #include <iostream>
@@ -250,13 +251,28 @@ int ConcurApp::operator()() {
                | default_log();
          }
 
-         
-
-
+         gli::image png_image = texi::read_png_image(path);
+         if (!png_image.empty()) {
+            ImageData data { std::move(png_image), pair.second };
+            if (data.type == input_type::automatic) {
+               data.type = input_type::png;
+            }
+            U16 dim = (U16)min(data.image.extent().x, data.image.extent().y);
+            images.emplace(dim, std::move(data));
+         } else {
+            gli::image image = texi::read_simple_image(path);
+            if (!image.empty()) {
+               ImageData data { std::move(image), pair.second };
+               if (data.type == input_type::automatic) {
+                  data.type = input_type::bitmap;
+               }
+               U16 dim = (U16)min(data.image.extent().x, data.image.extent().y);
+               images.emplace(dim, std::move(data));
+            } else {
+               throw Fatal("Image format not recognized!");
+            }
+         }
       }
-
-      // TODO load inputs
-
    } catch (const fs::filesystem_error& e) {
       status_ = 4;
       be_error() << "Filesystem error while reading inputs!"

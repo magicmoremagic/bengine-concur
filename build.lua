@@ -6,7 +6,8 @@ tool 'concur' {
          'core-id-with-names',
          'util',
          'cli',
-         'ctable'
+         'ctable',
+         'texi'
       }
    }
 }
