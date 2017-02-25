@@ -7,7 +7,7 @@ tool 'concur' {
          'util',
          'cli',
          'ctable',
-         'texi'
+         'gfx'
       }
    }
 }
