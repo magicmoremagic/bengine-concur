@@ -5,7 +5,7 @@
 #include <be/util/parse_numeric_string.hpp>
 #include <be/core/logging.hpp>
 #include <be/core/alg.hpp>
-#include <be/gfx/read_image.hpp>
+//#include <be/gfx/read_image.hpp>
 #include <gli/gli.hpp>
 #include <stb/stb_image.h>
 #include <iostream>
@@ -251,7 +251,7 @@ int ConcurApp::operator()() {
                | default_log();
          }
 
-         gli::image png_image = gfx::read_png_image(path);
+         /*gli::image png_image = gfx::read_png_image(path);
          if (!png_image.empty()) {
             ImageData data { std::move(png_image), pair.second };
             if (data.type == input_type::automatic) {
@@ -271,7 +271,7 @@ int ConcurApp::operator()() {
             } else {
                throw Fatal("Image format not recognized!");
             }
-         }
+         }*/
       }
    } catch (const fs::filesystem_error& e) {
       status_ = 4;
