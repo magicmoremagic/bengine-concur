@@ -1,4 +1,6 @@
 #include "concur_app.hpp"
+#include "version.hpp"
+#include <be/core/version.hpp>
 #include <be/cli/cli.hpp>
 #include <be/util/files.hpp>
 #include <be/util/path_glob.hpp>
@@ -173,7 +175,7 @@ ConcurApp::ConcurApp(int argc, char** argv) {
 
       if (show_version) {
          proc
-            //(prologue (BE_BLT_VERSION).query())
+            (prologue (BE_CONCUR_VERSION_STRING).query())
             (license (BE_LICENSE).query())
             (license (BE_COPYRIGHT).query())
             ;
