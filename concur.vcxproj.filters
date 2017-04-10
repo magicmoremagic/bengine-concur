@@ -26,5 +26,8 @@
     <ClInclude Include="include\concur_app.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\version.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
