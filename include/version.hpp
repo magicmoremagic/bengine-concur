@@ -6,7 +6,7 @@
 
 #define BE_CONCUR_VERSION_MAJOR 0
 #define BE_CONCUR_VERSION_MINOR 1
-#define BE_CONCUR_VERSION_REV 2
+#define BE_CONCUR_VERSION_REV 3
 
 /*!! include('common/version', 'BE_CONCUR', 'ConCur') !! 6 */
 /* ################# !! GENERATED CODE -- DO NOT MODIFY !! ################# */

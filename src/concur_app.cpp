@@ -8,7 +8,7 @@
 #include <be/core/logging.hpp>
 #include <be/core/alg.hpp>
 //#include <be/gfx/read_image.hpp>
-#include <gli/gli.hpp>
+//#include <gli/gli.hpp>
 #include <stb/stb_image.h>
 #include <iostream>
 #include <fstream>
@@ -232,7 +232,7 @@ int ConcurApp::operator()() {
    }
 
    struct ImageData {
-      gli::image image;
+      //gli::image image;
       input_type type;
    };
 
