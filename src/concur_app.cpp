@@ -59,62 +59,50 @@ ConcurApp::ConcurApp(int argc, char** argv) {
                .extra(Cell() << nl << "Adding an image does not guarantee that it will be used; use " << fg_yellow << "-s" << reset << " to specify an output image of the same or smaller size."))
 
 
-         (param ({ "x" },{ "hotspot-x" }, "NUMBER",
-            [&](const S& str) {
-               hotspot.x = util::parse_bounded_numeric_string<F32>(str, 0, 1);
-            }).desc(Cell() << "Specifies the X coordinate of the cursor hotspot.")
+         (numeric_param ({ "x" },{ "hotspot-x" }, "NUMBER", hotspot.x, 0.f, 1.f).desc(Cell() << "Specifies the X coordinate of the cursor hotspot.")
               .extra(Cell() << nl << "This option causes the output to be a cursor, regardless of the extension of the output file.  "
                             << "This option must be specified before any " << fg_yellow << "-s" << reset << " flags that define output sizes.  "
                             << "The number can be either a normalized floating-point value in the range [0, 1] or an integer ratio like " << fg_cyan << "4/16"))
 
-          (param ({ "y" },{ "hotspot-y" }, "NUMBER",
-           [&](const S& str) {
-               hotspot.y = util::parse_bounded_numeric_string<F32>(str, 0, 1);
-            }).desc(Cell() << "Specifies the Y coordinate of the cursor hotspot.")
+         (numeric_param ({ "y" },{ "hotspot-y" }, "NUMBER", hotspot.y, 0.f, 1.f).desc(Cell() << "Specifies the Y coordinate of the cursor hotspot.")
                .extra(Cell() << nl << "This option causes the output to be a cursor, regardless of the extension of the output file.  "
                       << "This option must be specified before any " << fg_yellow << "-s" << reset << " flags that define output sizes.  "
                       << "The number can be either a normalized floating-point value in the range [0, 1] or an integer ratio like " << fg_cyan << "4/16"))
 
-         (param ({ "s" },{ "size" }, "DIMENSION",
+         (param ({ "s" },{ "size" }, "DIMENSION", 
             [&](const S& str) {
-               U16 size = util::parse_bounded_numeric_string<U16>(str, 1, 256);
+               U16 size = util::throw_on_error(util::parse_bounded_numeric_string<U16>(str, 1, 256));
                output_sizes_[size] = hotspot;
             }).desc(Cell() << "An image of the specified width and height will be added to the output.")
               .extra(Cell() << nl << "If no source image is specified with this size or larger, a warning will be generated and this image size will be skipped."))
 
-         (flag ({ "S" },{ "small", "16" }, "Equivalent to -s 16",
-            [&]() {
+         (flag ({ "S" },{ "small", "16" }, [&]() {
                output_sizes_[16] = hotspot;
-            }))
+            }).desc("Equivalent to -s 16"))
 
-         (flag ({ "M" },{ "medium", "24" }, "Equivalent to -s 24",
-            [&]() {
+         (flag ({ "M" },{ "medium", "24" }, [&]() {
                output_sizes_[24] = hotspot;
-            }))
+            }).desc("Equivalent to -s 24"))
 
-         (flag ({ "N" },{ "normal", "32" }, "Equivalent to -s 32",
-            [&]() {
+         (flag ({ "N" },{ "normal", "32" }, [&]() {
                output_sizes_[32] = hotspot;
-            }))
+            }).desc("Equivalent to -s 32"))
 
-         (flag ({ "L" },{ "large", "48" }, "Equivalent to -s 48",
-            [&]() {
+         (flag ({ "L" },{ "large", "48" }, [&]() {
                output_sizes_[48] = hotspot;
-            }))
+            }).desc("Equivalent to -s 48"))
 
-         (flag ({ "X" },{ "extra-large", "256" }, "Equivalent to -s 256",
-            [&]() {
+         (flag ({ "X" },{ "extra-large", "256" }, [&]() {
                output_sizes_[256] = hotspot;
-            }))
+            }).desc("Equivalent to -s 256"))
 
-         (flag ({ "A" },{ "all" }, "Equivalent to -SMNLX",
-            [&]() {
+         (flag ({ "A" },{ "all" }, [&]() {
                output_sizes_[16] = hotspot;
                output_sizes_[24] = hotspot;
                output_sizes_[32] = hotspot;
                output_sizes_[48] = hotspot;
                output_sizes_[256] = hotspot;
-            }))
+            }).desc("Equivalent to -SMNLX"))
          
          (nth (0,
             [&](const S& str) {
@@ -126,7 +114,7 @@ ConcurApp::ConcurApp(int argc, char** argv) {
 
          (verbosity_param ({ "v" },{ "verbosity" }, "LEVEL", default_log().verbosity_mask()))
          
-         (flag ({ "V" },{ "version" }, "Prints version information to standard output.", show_version))
+         (flag ({ "V" },{ "version" }, show_version).desc("Prints version information to standard output."))
 
          (param ({ "?" },{ "help" }, "OPTION",
             [&](const S& value) {
