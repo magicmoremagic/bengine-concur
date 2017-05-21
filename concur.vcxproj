@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectName>concur</ProjectName>
     <RootNamespace>concur</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <ProjectGuid>{6BFC956F-5F48-48F3-A32C-3875742CE82D}</ProjectGuid>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
