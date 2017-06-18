@@ -5,6 +5,7 @@ tool 'concur' {
          'core',
          'core-id-with-names',
          'util',
+         'util-fs',
          'cli',
          'ctable',
          'gfx'
