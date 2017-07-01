@@ -2,7 +2,7 @@
 #include "version.hpp"
 #include <be/core/version.hpp>
 #include <be/cli/cli.hpp>
-#include <be/util/files.hpp>
+#include <be/util/get_file_contents.hpp>
 #include <be/util/path_glob.hpp>
 #include <be/util/parse_numeric_string.hpp>
 #include <be/core/logging.hpp>
@@ -71,7 +71,7 @@ ConcurApp::ConcurApp(int argc, char** argv) {
 
          (param ({ "s" },{ "size" }, "DIMENSION", 
             [&](const S& str) {
-               U16 size = util::throw_on_error(util::parse_bounded_numeric_string<U16>(str, 1, 256));
+               U16 size = util::parse_bounded_numeric_string<U16>(str, 1, 256);
                output_sizes_[size] = hotspot;
             }).desc(Cell() << "An image of the specified width and height will be added to the output.")
               .extra(Cell() << nl << "If no source image is specified with this size or larger, a warning will be generated and this image size will be skipped."))
@@ -176,26 +176,26 @@ ConcurApp::ConcurApp(int argc, char** argv) {
          proc.describe(std::cout, ids::cli_describe_section_license);
       }
 
-   } catch (const cli::OptionException& e) {
+   } catch (const cli::OptionError& e) {
       status_ = 2;
       be_error() << S(e.what())
          & attr(ids::log_attr_index) << e.raw_position()
          & attr(ids::log_attr_argument) << S(e.argument())
          & attr(ids::log_attr_option) << S(e.option())
          | default_log();
-   } catch (const cli::ArgumentException& e) {
+   } catch (const cli::ArgumentError& e) {
       status_ = 2;
       be_error() << S(e.what())
          & attr(ids::log_attr_index) << e.raw_position()
          & attr(ids::log_attr_argument) << S(e.argument())
          | default_log();
-   } catch (const Fatal& e) {
+   } catch (const FatalTrace& e) {
       status_ = 2;
       be_error() << "Fatal error while parsing command line!"
          & attr(ids::log_attr_message) << S(e.what())
          & attr(ids::log_attr_trace) << StackTrace(e.trace())
          | default_log();
-   } catch (const Recoverable<>& e) {
+   } catch (const RecoverableTrace& e) {
       status_ = 2;
       be_error() << "Error while parsing command line!"
          & attr(ids::log_attr_message) << S(e.what())
@@ -270,13 +270,13 @@ int ConcurApp::operator()() {
          & attr(ids::log_attr_code) << std::error_code(e.code())
          & attr(ids::log_attr_path) << e.path1().generic_string()
          | default_log();
-   } catch (const Fatal& e) {
+   } catch (const FatalTrace& e) {
       status_ = 4;
       be_error() << "Fatal error while reading inputs!"
          & attr(ids::log_attr_message) << S(e.what())
          & attr(ids::log_attr_trace) << StackTrace(e.trace())
          | default_log();
-   } catch (const Recoverable<>& e) {
+   } catch (const RecoverableTrace& e) {
       status_ = 4;
       be_error() << "Error while reading inputs!"
          & attr(ids::log_attr_message) << S(e.what())
@@ -306,9 +306,7 @@ int ConcurApp::operator()() {
          fs::create_directories(output_path_.parent_path());
       }
 
-      be_short_verbose() << "Output path: " << color::fg_gray << BE_LOG_INTERP(BEIDN_LOG_ATTR_PATH)
-         & hidden(ids::log_attr_path) << output_path_.generic_string()
-         | default_log();
+      be_short_verbose() << "Output path: " << color::fg_gray << output_path_.generic_string() | default_log();
 
 
 
@@ -324,13 +322,13 @@ int ConcurApp::operator()() {
          & attr(ids::log_attr_code) << std::error_code(e.code())
          & attr(ids::log_attr_path) << e.path1().generic_string()
          | default_log();
-   } catch (const Fatal& e) {
+   } catch (const FatalTrace& e) {
       status_ = 1;
       be_error() << "Fatal error while configuring paths!"
          & attr(ids::log_attr_message) << S(e.what())
          & attr(ids::log_attr_trace) << StackTrace(e.trace())
          | default_log();
-   } catch (const Recoverable<>& e) {
+   } catch (const RecoverableTrace& e) {
       status_ = 1;
       be_error() << "Error while configuring paths!"
          & attr(ids::log_attr_message) << S(e.what())
