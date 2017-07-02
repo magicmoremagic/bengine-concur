@@ -42,12 +42,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
   <ItemGroup>
-    <ClCompile Include="src\concur.cpp" />
-    <ClCompile Include="src\concur_app.cpp" />
+    <ClCompile Include="src-concur\concur.cpp" />
+    <ClCompile Include="src-concur\concur_app.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\concur_app.hpp" />
-    <ClInclude Include="include\version.hpp" />
+    <ClInclude Include="src-concur\concur_app.hpp" />
+    <ClInclude Include="src-concur\version.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
