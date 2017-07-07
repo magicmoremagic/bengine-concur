@@ -2,6 +2,6 @@
 For instructions on building, see the main repository at
 [magicmoremagic/bengine](https://github.com/magicmoremagic/bengine).
 
-## `betxc` - bengine Texture Converter
+## `atex` - Texture Assembly Tool
 
 ## `concur` - Command line interface for generating icons (.ico) and cursors (.cur)
