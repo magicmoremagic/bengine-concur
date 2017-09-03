@@ -22,6 +22,7 @@ AtexApp::AtexApp(int argc, char** argv) {
 
       bool show_version = false;
       bool show_help = false;
+      bool verbose = false;
       S help_query;
 
       bool configure_output = false;
@@ -39,7 +40,7 @@ AtexApp::AtexApp(int argc, char** argv) {
          (prologue (Table() << header << "TEXTURE ASSEMBLY TOOL").query())
 
          (synopsis (Cell() << fg_dark_gray << "{ " << fg_cyan << "OPTIONS" << fg_blue << " INPUT" << fg_dark_gray << " } ["
-                           << fg_yellow << "--" << fg_dark_gray << " { " << fg_cyan << "OPTIONS" << fg_blue << " OUTPUT" << fg_dark_gray << " } ]"))
+                           << fg_yellow << "--" << fg_dark_gray << " { " << fg_cyan << "OPTIONS" << fg_blue << " OUTPUT" << fg_dark_gray << " } ]" ))
 
          (abstract ("Converts, combines, and extracts images and textures."))
 
@@ -392,10 +393,7 @@ AtexApp::AtexApp(int argc, char** argv) {
               .extra(Cell() << nl << "If " << fg_cyan << "OPTION" << reset
                             << " is provided, the options list will be filtered to show only options that contain that string."))
 
-         (flag ({ },{ "help" },
-            [&]() {
-               proc.verbose(true);
-            }).ignore_values(true))
+         (flag ({ },{ "help" }, verbose).ignore_values(true))
                
          (exit_code (status_ok, "There were no errors."))
          (exit_code (status_warning, "All outputs were written, but at least one warning or notice was generated."))
@@ -416,7 +414,7 @@ AtexApp::AtexApp(int argc, char** argv) {
          ;
 #pragma endregion
 
-      proc(argc, argv);
+      proc.process(argc, argv);
 
       if (!show_help && !show_version && input_files_.empty()) {
          show_help = true;
@@ -434,10 +432,10 @@ AtexApp::AtexApp(int argc, char** argv) {
       }
 
       if (show_help) {
-         proc.describe(std::cout, help_query);
+         proc.describe(std::cout, verbose, help_query);
       } else if (show_version) {
-         proc.describe(std::cout, ids::cli_describe_section_prologue);
-         proc.describe(std::cout, ids::cli_describe_section_license);
+         proc.describe(std::cout, verbose, ids::cli_describe_section_prologue);
+         proc.describe(std::cout, verbose, ids::cli_describe_section_license);
       }
 
       if (!input_files_.empty() && output_files_.empty() && configuring_input()) {

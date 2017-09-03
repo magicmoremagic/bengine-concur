@@ -9,6 +9,13 @@
 #include <be/core/glm.hpp>
 #include <be/core/byte_order.hpp>
 
+// TODO ktx, dds, glraw read/write
+// TODO stbiw png, tga, hdr, bmp write
+// TODO libpng read/write
+// TODO S3TC decoding
+// TODO RGTC decoding
+// TODO BPTC decoding
+
 namespace be::atex {
 
 ///////////////////////////////////////////////////////////////////////////////
