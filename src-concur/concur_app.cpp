@@ -40,20 +40,20 @@ ConcurApp::ConcurApp(int argc, char** argv) {
 
          (abstract ("Concur converts one or more image files into a Windows icon or cursor."))
 
-         (param ({ "I", "i" },{ "input" }, "PATH", 
+         (param ({ "I", "i" },{ "input" }, "PATH",
             [&](const S& str) {
                inputs_[str] = input_type::automatic;
             }).desc(Cell() << "Adds the specified path as a source image.")
               .extra(Cell() << nl << "Adding an image does not guarantee that it will be used; use " << fg_yellow << "-s" << reset << " to specify an output image of the same or smaller size."
                             << "If the image is a PNG image, it will be stored as such in the icon or cursor, even if it is resized.  Otherwise it will be stored as a bitmap."))
 
-         (param ({ "P", "p" },{ "png" }, "PATH", 
+         (param ({ "P", "p" },{ "png" }, "PATH",
             [&](const S& str) {
                inputs_[str] = input_type::png;
             }).desc(Cell() << "Adds the specified path as a source image.  Output images based on this one will be stored as PNGs.")
                .extra(Cell() << nl << "Adding an image does not guarantee that it will be used; use " << fg_yellow << "-s" << reset << " to specify an output image of the same or smaller size."))
 
-         (param ({ "B", "b" },{ "bmp", "dib" }, "PATH", 
+         (param ({ "B", "b" },{ "bmp", "dib" }, "PATH",
             [&](const S& str) {
                inputs_[str] = input_type::bitmap;
             }).desc(Cell() << "Adds the specified path as a source image.  Output images based on this one will be stored as bitmaps.")
@@ -70,7 +70,7 @@ ConcurApp::ConcurApp(int argc, char** argv) {
                       << "This option must be specified before any " << fg_yellow << "-s" << reset << " flags that define output sizes.  "
                       << "The number can be either a normalized floating-point value in the range [0, 1] or an integer ratio like " << fg_cyan << "4/16"))
 
-         (param ({ "s" },{ "size" }, "DIMENSION", 
+         (param ({ "s" },{ "size" }, "DIMENSION",
             [&](const S& str) {
                U16 size = util::parse_bounded_numeric_string<U16>(str, 1, 256);
                output_sizes_[size] = hotspot;
@@ -104,7 +104,7 @@ ConcurApp::ConcurApp(int argc, char** argv) {
                output_sizes_[48] = hotspot;
                output_sizes_[256] = hotspot;
             }).desc("Equivalent to -SMNLX"))
-         
+
          (nth (0,
             [&](const S& str) {
                output_path_ = str;
@@ -114,7 +114,7 @@ ConcurApp::ConcurApp(int argc, char** argv) {
          (end_of_options ())
 
          (verbosity_param ({ "v" },{ "verbosity" }, "LEVEL", default_log().verbosity_mask()))
-         
+
          (flag ({ "V" },{ "version" }, show_version).desc("Prints version information to standard output."))
 
          (param ({ "?" },{ "help" }, "OPTION",
@@ -128,14 +128,14 @@ ConcurApp::ConcurApp(int argc, char** argv) {
                             << " is provided, the options list will be filtered to show only options that contain that string."))
 
          (flag ({ },{ "help" }, verbose).ignore_values(true))
-               
+
          (exit_code (0, "There were no errors."))
          (exit_code (1, "An unknown error occurred."))
          (exit_code (2, "There was a problem parsing the command line arguments."))
          (exit_code (3, "An input file does not exist or is a directory."))
          (exit_code (4, "An I/O error occurred while reading an input file."))
          (exit_code (5, "An I/O error occurred while writing an output file."))
-               
+
          (example (Cell() << fg_gray << "icon.ico" << fg_yellow << " -i " << fg_cyan << "icon_image.tga" << fg_yellow << " -A",
             "Creates an icon named 'icon.ico' in the working directory containing 16x16, 24x24, 32x32, 48x48, and 256x256 bitmap images, assuming icon_image.tga is at least 256 pixels wide/high."))
          (example (Cell() << fg_yellow << "-b " << fg_cyan << "icon_16x16.png"
@@ -204,7 +204,7 @@ ConcurApp::ConcurApp(int argc, char** argv) {
       be_error() << "Unexpected exception parsing command line!"
          & attr(ids::log_attr_message) << S(e.what())
          | default_log();
-   }   
+   }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -310,8 +310,8 @@ int ConcurApp::operator()() {
 
 
 
-      
-      
+
+
       // TODO write ico/cur
    } catch (const fs::filesystem_error& e) {
       status_ = 1;

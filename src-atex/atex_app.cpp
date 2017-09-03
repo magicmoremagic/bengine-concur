@@ -415,7 +415,7 @@ Texture AtexApp::make_texture_(const std::vector<input_>& inputs) {
             base_input = &input;
             base_dim = img.dim();
          }
-         
+
          min_layer = std::min(min_layer, TextureStorage::layer_index_type(layer));
          max_layer = std::max(max_layer, TextureStorage::layer_index_type(layer));
 
@@ -607,14 +607,14 @@ Texture AtexApp::make_texture_(const std::vector<input_>& inputs) {
       log_exception(std::system_error(std::make_error_code(std::errc::not_enough_memory), "Not enough memory to allocate merged texture"), default_log());
       return result;
    }
-   
+
    result.view = TextureView(format, tex_class, *result.storage, 0, layers, 0, faces, 0, levels);
 
    visit_texture_images(result.view, [&](ImageView& img) {
       std::size_t layer = img.layer();
       std::size_t face = img.face();
       std::size_t level = img.level();
-      
+
       constexpr int layer_bits = 8 * sizeof(TextureStorage::layer_index_type);
       constexpr int face_bits = 8 * sizeof(TextureStorage::face_index_type);
       constexpr int level_bits = 8 * sizeof(TextureStorage::level_index_type);
@@ -646,7 +646,7 @@ void AtexApp::write_outputs_(TextureView view) {
             | default_log();
          continue;
       }
-      
+
       S filename = file.path.filename().generic_string();
 
       if (!file.force_layers) {

@@ -115,7 +115,7 @@ AtexApp::AtexApp(int argc, char** argv) {
             .desc("Skips any layer indices less than the specified value, in the next input texture."))
          (numeric_param<TextureStorage::layer_index_type> ({ }, { "last-layer" }, "N", next_input.last_layer, 0, TextureStorage::max_layers - 1).when(configuring_input)
             .desc("Skips any layer indices greater than the specified value, in the next input texture."))
-         
+
          (numeric_param<TextureStorage::face_index_type> ({ }, { "first-face" }, "N", next_input.first_face, 0, TextureStorage::max_faces - 1).when(configuring_input)
             .desc("Skips any face indices less than the specified value, in the next input texture."))
          (numeric_param<TextureStorage::face_index_type> ({ }, { "last-face" }, "N", next_input.last_face, 0, TextureStorage::max_faces - 1).when(configuring_input)
@@ -142,7 +142,7 @@ AtexApp::AtexApp(int argc, char** argv) {
                next_input.component_types[3] = static_cast<U8>(ctype);
                next_input.override_components = true;
             }).when(configuring_input).desc("Reinterpret the next input texture to treat the fourth component as a different data type."))
-      
+
          (enum_param<Swizzle> ({ "r" }, { "swizzle-r" }, "SWIZZLE", nullptr, [&](Swizzle swizzle) {
                next_input.swizzles.r = static_cast<U8>(swizzle);
                next_input.override_components = true;
@@ -164,7 +164,7 @@ AtexApp::AtexApp(int argc, char** argv) {
                next_input.colorspace = colorspace;
                next_input.override_colorspace = true;
             }).when(configuring_input).desc("Reinterpret the next input texture to treat it as if it were in the specified colorspace."))
-      
+
          (flag ({ }, { "premultiplied" }, [&]() {
                next_input.premultiplied = true;
                next_input.override_premultiplied = true;
@@ -187,7 +187,7 @@ AtexApp::AtexApp(int argc, char** argv) {
                next_input = input_file_();
                return true;
             }).when(configuring_input))
-         
+
          (flag ({ }, { "" }, configure_output)
             .when(configuring_input)
             .desc("Switches to output configuration mode")
@@ -211,14 +211,14 @@ AtexApp::AtexApp(int argc, char** argv) {
                return packing;
             }).when(configuring_output)
               .desc("Specifies that output textures should use a custom texel format and sets the block packing for that format."))
-               
+
          (numeric_param ({ "c" }, { "components" }, "N", components_, (U8)1, (U8)4)
             .when(configuring_output).desc("Specifies the number of components when using a custom texel format."))
 
          (enum_param<ComponentType> ({ "0" }, { "ctype-0" }, "TYPE", nullptr, [this](ComponentType ctype) {
                component_types_[0] = static_cast<U8>(ctype);
             }).when(configuring_output).desc("Specifies the data type for the first component when using a custom texel format."))
-              
+
          (enum_param<ComponentType> ({ "1" }, { "ctype-1" }, "TYPE", nullptr, [this](ComponentType ctype) {
                component_types_[1] = static_cast<U8>(ctype);
             }).when(configuring_output).desc("Specifies the data type for the second component when using a custom texel format."))
@@ -228,7 +228,7 @@ AtexApp::AtexApp(int argc, char** argv) {
          (enum_param<ComponentType> ({ "3" }, { "ctype-3" }, "TYPE", nullptr, [this](ComponentType ctype) {
                component_types_[3] = static_cast<U8>(ctype);
             }).when(configuring_output).desc("Specifies the data type for the fourth component when using a custom texel format."))
-      
+
          (enum_param<Swizzle> ({ "r" }, { "swizzle-r" }, "SWIZZLE", nullptr, [this](Swizzle swizzle) {
                swizzles_.r = static_cast<U8>(swizzle);
             }).when(configuring_output).desc("Specifies the component corresponding to the red channel when using a custom texel format."))
@@ -250,7 +250,7 @@ AtexApp::AtexApp(int argc, char** argv) {
                colorspace_ = colorspace_;
                override_colorspace_ = true;
             }).when(configuring_output).desc("Specifies the output colorspace."))
-      
+
          (flag ({ }, { "premultiplied" }, [this]() {
                premultiplied_ = true;
                override_premultiplied_ = true;
@@ -259,7 +259,7 @@ AtexApp::AtexApp(int argc, char** argv) {
                premultiplied_ = false;
                override_premultiplied_ = true;
             }).when(configuring_output).desc("Output textures should not be premultiplied."))
-               
+
          (numeric_param<U8> ({ }, { "line-align" }, "BITS", line_alignment_bits_, 0, TextureAlignment::max_alignment_bits).when(configuring_output)
             .desc("Specifies the minimum alignment of each line."))
          (numeric_param<U8> ({ }, { "plane-align" }, "BITS", plane_alignment_bits_, 0, TextureAlignment::max_alignment_bits).when(configuring_output)
@@ -304,7 +304,7 @@ AtexApp::AtexApp(int argc, char** argv) {
          (numeric_param<TextureStorage::layer_index_type> ({ }, { "layers" }, "N", next_output.layers, 1, TextureStorage::max_layers).when(configuring_output)
             .desc("Specifies the maximum number of layers to write to the next output file.")
             .extra("If writing multiple layers to a file format which does not support layers, multiple files will be written, with '-layer' followed by the layer index appended to the filename."))
-         
+
          (numeric_param<TextureStorage::face_index_type>({ }, { "base-face" }, "N", next_output.base_face, 0, TextureStorage::max_faces - 1).when(configuring_output)
             .desc("Specifies the first face index to write to the next output file."))
          (numeric_param<TextureStorage::face_index_type> ({ }, { "faces" }, "N", next_output.faces, 1, TextureStorage::max_faces).when(configuring_output).
@@ -380,7 +380,7 @@ AtexApp::AtexApp(int argc, char** argv) {
             .desc("Overwrites output files that already exist."))
 
          (verbosity_param ({ "v" },{ "verbosity" }, "LEVEL", default_log().verbosity_mask()))
-         
+
          (flag ({ "V" },{ "version" }, show_version).desc("Prints version information to standard output."))
 
          (param ({ "?" },{ "help" }, "OPTION",
@@ -394,7 +394,7 @@ AtexApp::AtexApp(int argc, char** argv) {
                             << " is provided, the options list will be filtered to show only options that contain that string."))
 
          (flag ({ },{ "help" }, verbose).ignore_values(true))
-               
+
          (exit_code (status_ok, "There were no errors."))
          (exit_code (status_warning, "All outputs were written, but at least one warning or notice was generated."))
          (exit_code (status_exception, "An unexpected error occurred."))
@@ -404,7 +404,7 @@ AtexApp::AtexApp(int argc, char** argv) {
          (exit_code (status_read_error, "An error occurred while reading an input file."))
          (exit_code (status_conversion_error, "An error occurred while converting or merging input textures."))
          (exit_code (status_write_error, "An error occurred while writing an output file."))
-               
+
          (example (Cell() << fg_gray << "tex-level0.png tex-level1.png tex-level2.png",
             "Assembles 3 images representing consecutive mipmap levels of a texture and writes result to a file named 'tex.betx' in the working directory."))
          (example (Cell() << fg_gray << "tex.ktx" << fg_yellow << " -- " << fg_gray << "tex.png",
@@ -441,7 +441,7 @@ AtexApp::AtexApp(int argc, char** argv) {
       if (!input_files_.empty() && output_files_.empty() && configuring_input()) {
          next_output.file_format = TextureFileFormat::betx;
          next_output.path = input_files_.front().path;
-         
+
          std::regex re("-(?:[lfm]|layer|face|level)\\d+", std::regex_constants::icase);
          S filename = std::regex_replace(next_output.path.filename().string(), re, "");
          next_output.path = next_output.path.parent_path() / filename;

@@ -117,7 +117,7 @@ private:
 
    std::vector<Path> input_search_paths_;
    std::vector<input_file_> input_files_;
-   
+
    bool override_block_ = false;
    gfx::tex::BlockPacking packing_ = gfx::tex::BlockPacking::s_8_8_8_8;
    U8 components_ = 4;
