@@ -58,19 +58,19 @@ int AtexApp::operator()() {
 
    } catch (const FatalTrace& e) {
       set_status_(status_exception);
-      log_exception(e, default_log());
+      log_exception(e);
    } catch (const RecoverableTrace& e) {
       set_status_(status_exception);
-      log_exception(e, default_log());
+      log_exception(e);
    } catch (const fs::filesystem_error& e) {
       set_status_(status_exception);
-      log_exception(e, default_log());
+      log_exception(e);
    } catch (const std::system_error& e) {
       set_status_(status_exception);
-      log_exception(e, default_log());
+      log_exception(e);
    } catch (const std::exception& e) {
       set_status_(status_exception);
-      log_exception(e, default_log());
+      log_exception(e);
    }
 
    return status_;
@@ -289,12 +289,12 @@ AtexApp::input_ AtexApp::load_input_(const input_file_& file) {
    reader.read(file.path, ec);
    if (ec) {
       set_status_(status_read_error);
-      log_exception(std::system_error(ec, "Failed to read texture file: " + file.path.string()), default_log());
+      log_exception(std::system_error(ec, "Failed to read texture file: " + file.path.string()));
    } else {
       result.texture = reader.texture(ec);
       if (ec) {
          set_status_(status_read_error);
-         log_exception(std::system_error(ec, "Failed to parse texture file: " + file.path.string()), default_log());
+         log_exception(std::system_error(ec, "Failed to parse texture file: " + file.path.string()));
       } else if (!result.texture.view) {
          set_status_(status_read_error);
          be_error() << "Loading texture file resulted in an empty texture!"
@@ -368,7 +368,7 @@ AtexApp::input_ AtexApp::load_input_(const input_file_& file) {
             } catch (const std::bad_alloc&) {
                view = TextureView();
                set_status_(status_read_error);
-               log_exception(fs::filesystem_error("Not enough memory to duplicate texture", file.path, std::make_error_code(std::errc::not_enough_memory)), default_log());
+               log_exception(fs::filesystem_error("Not enough memory to duplicate texture", file.path, std::make_error_code(std::errc::not_enough_memory)));
             }
          } else {
             view = new_view;
@@ -604,7 +604,7 @@ Texture AtexApp::make_texture_(const std::vector<input_>& inputs) {
       result.storage = std::make_unique<TextureStorage>(layers, faces, levels, base_dim, format.block_dim(), block_span, alignment);
    } catch (const std::bad_alloc&) {
       set_status_(status_conversion_error);
-      log_exception(std::system_error(std::make_error_code(std::errc::not_enough_memory), "Not enough memory to allocate merged texture"), default_log());
+      log_exception(std::system_error(std::make_error_code(std::errc::not_enough_memory), "Not enough memory to allocate merged texture"));
       return result;
    }
 
@@ -658,7 +658,7 @@ void AtexApp::write_outputs_(TextureView view) {
             file.layers = 1;
             if (ec) {
                set_status_(status_write_error);
-               log_exception(fs::filesystem_error("Invalid layer specified in output filename.", file.path, ec), default_log());
+               log_exception(fs::filesystem_error("Invalid layer specified in output filename.", file.path, ec));
                continue;
             }
          }
@@ -673,7 +673,7 @@ void AtexApp::write_outputs_(TextureView view) {
             file.faces = 1;
             if (ec) {
                set_status_(status_write_error);
-               log_exception(fs::filesystem_error("Invalid face specified in output filename.", file.path, ec), default_log());
+               log_exception(fs::filesystem_error("Invalid face specified in output filename.", file.path, ec));
                continue;
             }
          }
@@ -688,7 +688,7 @@ void AtexApp::write_outputs_(TextureView view) {
             file.levels = 1;
             if (ec) {
                set_status_(status_write_error);
-               log_exception(fs::filesystem_error("Invalid mipmap level specified in output filename.", file.path, ec), default_log());
+               log_exception(fs::filesystem_error("Invalid mipmap level specified in output filename.", file.path, ec));
                continue;
             }
          }
@@ -864,7 +864,7 @@ void AtexApp::write_output_(TextureView view, const Path& path, TextureFileForma
    }
    if (ec) {
       set_status_(status_write_error);
-      log_exception(fs::filesystem_error("Could not write output texture!", path, ec), default_log());
+      log_exception(fs::filesystem_error("Could not write output texture!", path, ec));
    }
 }
 

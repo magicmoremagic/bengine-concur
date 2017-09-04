@@ -452,25 +452,25 @@ AtexApp::AtexApp(int argc, char** argv) {
 
    } catch (const cli::OptionError& e) {
       set_status_(status_cli_error);
-      cli::log_exception(e, default_log());
+      log_exception(e);
    } catch (const cli::ArgumentError& e) {
       set_status_(status_cli_error);
-      cli::log_exception(e, default_log());
+      log_exception(e);
    } catch (const FatalTrace& e) {
       set_status_(status_cli_error);
-      log_exception(e, default_log());
+      log_exception(e);
    } catch (const RecoverableTrace& e) {
       set_status_(status_cli_error);
-      log_exception(e, default_log());
+      log_exception(e);
    } catch (const fs::filesystem_error& e) {
       set_status_(status_cli_error);
-      log_exception(e, default_log());
+      log_exception(e);
    } catch (const std::system_error& e) {
       set_status_(status_cli_error);
-      log_exception(e, default_log());
+      log_exception(e);
    } catch (const std::exception& e) {
       set_status_(status_cli_error);
-      log_exception(e, default_log());
+      log_exception(e);
    }
 }
 
