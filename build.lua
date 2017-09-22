@@ -22,6 +22,7 @@ tool 'tools-gfx' {
          'core-id-with-names',
          'util',
          'util-fs',
+         'util-string',
          'cli',
          'ctable',
          'gfx'

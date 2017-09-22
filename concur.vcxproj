@@ -41,6 +41,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|x64'">
+    <Link>
+      <AdditionalDependencies>core-debug.lib;zlib-static-debug.lib;core-id-with-names-debug.lib;util-debug.lib;util-fs-debug.lib;util-compression-debug.lib;util-prng-debug.lib;util-string-debug.lib;cli-debug.lib;ctable-debug.lib;gfx-debug.lib;gfx-tex-debug.lib;Dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'">
+    <Link>
+      <AdditionalDependencies>core.lib;zlib-static.lib;core-id-with-names.lib;util.lib;util-fs.lib;util-compression.lib;util-prng.lib;util-string.lib;cli.lib;ctable.lib;gfx.lib;gfx-tex.lib;Dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src-concur\concur.cpp" />
     <ClCompile Include="src-concur\concur_app.cpp" />
