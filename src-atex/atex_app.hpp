@@ -59,7 +59,7 @@ private:
       level_index_type last_level = gfx::tex::TextureStorage::max_levels - 1;
 
       bool override_components = false;
-      gfx::tex::ImageFormat::component_types_type component_types;
+      gfx::tex::ImageFormat::field_types_type field_types;
       gfx::tex::ImageFormat::swizzles_type swizzles = gfx::tex::swizzles_rgba();
 
       bool override_colorspace = false;
@@ -121,7 +121,7 @@ private:
    bool override_block_ = false;
    gfx::tex::BlockPacking packing_ = gfx::tex::BlockPacking::s_8_8_8_8;
    U8 components_ = 4;
-   gfx::tex::ImageFormat::component_types_type component_types_;
+   gfx::tex::ImageFormat::field_types_type field_types_;
    gfx::tex::ImageFormat::swizzles_type swizzles_ = gfx::tex::swizzles_rgba();
    U8 block_span_ = 0;
 

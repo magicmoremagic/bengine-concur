@@ -52,12 +52,12 @@ AtexApp::AtexApp(int argc, char** argv) {
                    "formats, but compressed texel formats can only be output if the input textures are provided in the exact same compressed texel format and no colorspace or alpha "
                    "premultiplication conversions are required.").verbose())
 
-         (summary (Cell() << "If any input texture component types or swizzles are reinterpreted with " << fg_yellow << "--ctype-*" << reset << " or " << fg_yellow
-                          << "--swizzle-*" << reset << " then they are all reinterpreted.  Component types will default to " << fg_cyan << "none" << reset
+         (summary (Cell() << "If any input texture field types or swizzles are reinterpreted with " << fg_yellow << "--ctype-*" << reset << " or " << fg_yellow
+                          << "--swizzle-*" << reset << " then they are all reinterpreted.  Field types will default to " << fg_cyan << "none" << reset
                           << " and swizzles will default to RGBA.").verbose())
 
          (summary (Cell() << "The texel format used for output textures will be the same as the first input texture for the lowest output mipmap level.  If " << fg_yellow << "--packing " << reset
-                          << "is specified, the block packing, component count, component types, swizzles, and block span are all overridden.  Otherwise the options which control those aspects of the "
+                          << "is specified, the block packing, component count, field types, swizzles, and block span are all overridden.  Otherwise the options which control those aspects of the "
                              "texel format will be ignored.  If any of the " << fg_yellow << "--*-align" << reset << " options are used, all other alignment parameters "
                              "will also be overridden.  Alignment is specified as a base-2 exponent; the actual alignment is (1 << " << fg_cyan << "BITS" << reset << ").").verbose())
 
@@ -126,39 +126,39 @@ AtexApp::AtexApp(int argc, char** argv) {
          (numeric_param<TextureStorage::level_index_type> ({ }, { "last-level" }, "N", next_input.last_level, 0, TextureStorage::max_levels - 1).when(configuring_input)
             .desc("Skips any level indices greater than the specified value, in the next input texture."))
 
-         (enum_param<ComponentType> ({ "0" }, { "ctype-0" }, "TYPE", nullptr, [&](ComponentType ctype) {
-               next_input.component_types[0] = static_cast<U8>(ctype);
+         (enum_param<FieldType> ({ "0" }, { "field-0" }, "TYPE", nullptr, [&](FieldType ctype) {
+               next_input.field_types[0] = static_cast<U8>(ctype);
                next_input.override_components = true;
-            }).when(configuring_input).desc("Reinterpret the next input texture to treat the first component as a different data type."))
-         (enum_param<ComponentType> ({ "1" }, { "ctype-1" }, "TYPE", nullptr, [&](ComponentType ctype) {
-               next_input.component_types[1] = static_cast<U8>(ctype);
+            }).when(configuring_input).desc("Reinterpret the next input texture to treat the first field as a different data type."))
+         (enum_param<FieldType> ({ "1" }, { "field-1" }, "TYPE", nullptr, [&](FieldType ctype) {
+               next_input.field_types[1] = static_cast<U8>(ctype);
                next_input.override_components = true;
-            }).when(configuring_input).desc("Reinterpret the next input texture to treat the second component as a different data type."))
-         (enum_param<ComponentType> ({ "2" }, { "ctype-2" }, "TYPE", nullptr, [&](ComponentType ctype) {
-               next_input.component_types[2] = static_cast<U8>(ctype);
+            }).when(configuring_input).desc("Reinterpret the next input texture to treat the second field as a different data type."))
+         (enum_param<FieldType> ({ "2" }, { "field-2" }, "TYPE", nullptr, [&](FieldType ctype) {
+               next_input.field_types[2] = static_cast<U8>(ctype);
                next_input.override_components = true;
-            }).when(configuring_input).desc("Reinterpret the next input texture to treat the third component as a different data type."))
-         (enum_param<ComponentType> ({ "3" }, { "ctype-3" }, "TYPE", nullptr, [&](ComponentType ctype) {
-               next_input.component_types[3] = static_cast<U8>(ctype);
+            }).when(configuring_input).desc("Reinterpret the next input texture to treat the third field as a different data type."))
+         (enum_param<FieldType> ({ "3" }, { "field-3" }, "TYPE", nullptr, [&](FieldType ctype) {
+               next_input.field_types[3] = static_cast<U8>(ctype);
                next_input.override_components = true;
-            }).when(configuring_input).desc("Reinterpret the next input texture to treat the fourth component as a different data type."))
+            }).when(configuring_input).desc("Reinterpret the next input texture to treat the fourth field as a different data type."))
 
          (enum_param<Swizzle> ({ "r" }, { "swizzle-r" }, "SWIZZLE", nullptr, [&](Swizzle swizzle) {
                next_input.swizzles.r = static_cast<U8>(swizzle);
                next_input.override_components = true;
-            }).when(configuring_input).desc("Reinterpret the next input texture to change the component corresponding to the red channel."))
+            }).when(configuring_input).desc("Reinterpret the next input texture to change the field corresponding to the red channel."))
          (enum_param<Swizzle> ({ "g" }, { "swizzle-g" }, "SWIZZLE", nullptr, [&](Swizzle swizzle) {
                next_input.swizzles.g = static_cast<U8>(swizzle);
                next_input.override_components = true;
-            }).when(configuring_input).desc("Reinterpret the next input texture to change the component corresponding to the green channel."))
+            }).when(configuring_input).desc("Reinterpret the next input texture to change the field corresponding to the green channel."))
          (enum_param<Swizzle> ({ "b" }, { "swizzle-b" }, "SWIZZLE", nullptr, [&](Swizzle swizzle) {
                next_input.swizzles.b = static_cast<U8>(swizzle);
                next_input.override_components = true;
-            }).when(configuring_input).desc("Reinterpret the next input texture to change the component corresponding to the blue channel."))
+            }).when(configuring_input).desc("Reinterpret the next input texture to change the field corresponding to the blue channel."))
          (enum_param<Swizzle> ({ "a" }, { "swizzle-a" }, "SWIZZLE", nullptr, [&](Swizzle swizzle) {
                next_input.swizzles.a = static_cast<U8>(swizzle);
                next_input.override_components = true;
-            }).when(configuring_input).desc("Reinterpret the next input texture to change the component corresponding to the alpha channel."))
+            }).when(configuring_input).desc("Reinterpret the next input texture to change the field corresponding to the alpha channel."))
 
          (enum_param<Colorspace> ({ "s" }, { "colorspace" }, "NAME", nullptr, [&](Colorspace colorspace) {
                next_input.colorspace = colorspace;
@@ -215,32 +215,32 @@ AtexApp::AtexApp(int argc, char** argv) {
          (numeric_param ({ "c" }, { "components" }, "N", components_, (U8)1, (U8)4)
             .when(configuring_output).desc("Specifies the number of components when using a custom texel format."))
 
-         (enum_param<ComponentType> ({ "0" }, { "ctype-0" }, "TYPE", nullptr, [this](ComponentType ctype) {
-               component_types_[0] = static_cast<U8>(ctype);
-            }).when(configuring_output).desc("Specifies the data type for the first component when using a custom texel format."))
+         (enum_param<FieldType> ({ "0" }, { "field-0" }, "TYPE", nullptr, [this](FieldType ctype) {
+               field_types_[0] = static_cast<U8>(ctype);
+            }).when(configuring_output).desc("Specifies the data type for the first field when using a custom texel format."))
 
-         (enum_param<ComponentType> ({ "1" }, { "ctype-1" }, "TYPE", nullptr, [this](ComponentType ctype) {
-               component_types_[1] = static_cast<U8>(ctype);
-            }).when(configuring_output).desc("Specifies the data type for the second component when using a custom texel format."))
-         (enum_param<ComponentType> ({ "2" }, { "ctype-2" }, "TYPE", nullptr, [this](ComponentType ctype) {
-               component_types_[2] = static_cast<U8>(ctype);
-            }).when(configuring_output).desc("Specifies the data type for the third component when using a custom texel format."))
-         (enum_param<ComponentType> ({ "3" }, { "ctype-3" }, "TYPE", nullptr, [this](ComponentType ctype) {
-               component_types_[3] = static_cast<U8>(ctype);
-            }).when(configuring_output).desc("Specifies the data type for the fourth component when using a custom texel format."))
+         (enum_param<FieldType> ({ "1" }, { "field-1" }, "TYPE", nullptr, [this](FieldType ctype) {
+               field_types_[1] = static_cast<U8>(ctype);
+            }).when(configuring_output).desc("Specifies the data type for the second field when using a custom texel format."))
+         (enum_param<FieldType> ({ "2" }, { "field-2" }, "TYPE", nullptr, [this](FieldType ctype) {
+               field_types_[2] = static_cast<U8>(ctype);
+            }).when(configuring_output).desc("Specifies the data type for the third field when using a custom texel format."))
+         (enum_param<FieldType> ({ "3" }, { "field-3" }, "TYPE", nullptr, [this](FieldType ctype) {
+               field_types_[3] = static_cast<U8>(ctype);
+            }).when(configuring_output).desc("Specifies the data type for the fourth field when using a custom texel format."))
 
          (enum_param<Swizzle> ({ "r" }, { "swizzle-r" }, "SWIZZLE", nullptr, [this](Swizzle swizzle) {
                swizzles_.r = static_cast<U8>(swizzle);
-            }).when(configuring_output).desc("Specifies the component corresponding to the red channel when using a custom texel format."))
+            }).when(configuring_output).desc("Specifies the field corresponding to the red channel when using a custom texel format."))
          (enum_param<Swizzle> ({ "g" }, { "swizzle-g" }, "SWIZZLE", nullptr, [this](Swizzle swizzle) {
                swizzles_.g = static_cast<U8>(swizzle);
-            }).when(configuring_output).desc("Specifies the component corresponding to the green channel when using a custom texel format."))
+            }).when(configuring_output).desc("Specifies the field corresponding to the green channel when using a custom texel format."))
          (enum_param<Swizzle> ({ "b" }, { "swizzle-b" }, "SWIZZLE", nullptr, [this](Swizzle swizzle) {
                swizzles_.b = static_cast<U8>(swizzle);
-            }).when(configuring_output).desc("Specifies the component corresponding to the blue channel when using a custom texel format."))
+            }).when(configuring_output).desc("Specifies the field corresponding to the blue channel when using a custom texel format."))
          (enum_param<Swizzle> ({ "a" }, { "swizzle-a" }, "SWIZZLE", nullptr, [this](Swizzle swizzle) {
                swizzles_.a = static_cast<U8>(swizzle);
-            }).when(configuring_output).desc("Specifies the component corresponding to the alpha channel when using a custom texel format."))
+            }).when(configuring_output).desc("Specifies the field corresponding to the alpha channel when using a custom texel format."))
 
          (numeric_param<U8> ({ }, { "block-span" }, "BYTES", block_span_, 0, ImageFormat::max_block_size)
             .when(configuring_output).desc("Specifies the block span when using a custom texel format.")

@@ -318,12 +318,12 @@ AtexApp::input_ AtexApp::load_input_(const input_file_& file) {
          }
 
          if (file.override_components) {
-            new_format.component_types(file.component_types);
+            new_format.field_types(file.field_types);
             new_format.swizzles(file.swizzles);
-            be_short_verbose() << "Overriding Component Type 0: " << new_format.component_type(0) | default_log();
-            be_short_verbose() << "Overriding Component Type 1: " << new_format.component_type(1) | default_log();
-            be_short_verbose() << "Overriding Component Type 2: " << new_format.component_type(2) | default_log();
-            be_short_verbose() << "Overriding Component Type 3: " << new_format.component_type(3) | default_log();
+            be_short_verbose() << "Overriding Component Type 0: " << new_format.field_type(0) | default_log();
+            be_short_verbose() << "Overriding Component Type 1: " << new_format.field_type(1) | default_log();
+            be_short_verbose() << "Overriding Component Type 2: " << new_format.field_type(2) | default_log();
+            be_short_verbose() << "Overriding Component Type 3: " << new_format.field_type(3) | default_log();
             be_short_verbose() << "Overriding R Swizzle: " << new_format.swizzle(0) | default_log();
             be_short_verbose() << "Overriding G Swizzle: " << new_format.swizzle(1) | default_log();
             be_short_verbose() << "Overriding B Swizzle: " << new_format.swizzle(2) | default_log();
@@ -546,17 +546,17 @@ Texture AtexApp::make_texture_(const std::vector<input_>& inputs) {
       format.block_dim(ImageFormat::block_dim_type(1));
       format.block_size(block_word_size(packing_) * block_word_count(packing_));
       format.components(components_);
-      format.component_types(component_types_);
+      format.field_types(field_types_);
       format.swizzles(swizzles_);
       block_span = block_span_;
    }
 
-   if (format.components() > component_count(format.packing())) {
+   if (format.components() > field_count(format.packing())) {
       set_status_(status_warning);
       be_notice() << "Component count conflict"
          & attr("Block Packing") << format.packing()
          & attr("Components") << std::size_t(format.components())
-         & attr("Expected Components") << std::size_t(component_count(format.packing()))
+         & attr("Expected Components") << std::size_t(field_count(format.packing()))
          | default_log();
    }
 
