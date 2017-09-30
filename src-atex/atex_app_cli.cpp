@@ -70,7 +70,6 @@ AtexApp::AtexApp(int argc, char** argv) {
                           << fg_dark_gray << ", " << fg_green << "Radiance RGBE"
                           << fg_dark_gray << ", " << fg_green << "PPM"
                           << fg_dark_gray << ", " << fg_green << "PBM"
-                          << fg_dark_gray << ", " << fg_green << "Softimage PIC"
                           << fg_dark_gray << ", " << fg_green << "DIB"
                           << fg_dark_gray << ", " << fg_green << "JPEG"
                           << fg_dark_gray << ", " << fg_green << "GIF").verbose())
