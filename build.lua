@@ -10,7 +10,8 @@ tool 'tools-gfx' {
          'util-fs',
          'util-string',
          'cli',
-         'gfx-tex'
+         'gfx-tex',
+         'gfx'
       }
    },
    app 'concur' {
