@@ -11,6 +11,7 @@
 #include <be/gfx/tex/mipmapping.hpp>
 #include <be/gfx/tex/blit_pixels.hpp>
 #include <be/gfx/tex/betx_writer.hpp>
+#include <be/gfx/tex/ktx_writer.hpp>
 #include <map>
 
 namespace be::atex {
@@ -847,7 +848,13 @@ void AtexApp::write_output_(TextureView view, const Path& path, TextureFileForma
          break;
       }
       case TextureFileFormat::ktx:
-         // TODO
+      {
+         KtxWriter writer;
+         writer.endianness(byte_order);
+         writer.texture(view);
+         writer.write(path, ec);
+         break;
+      }
       case TextureFileFormat::dds:
          // TODO
       case TextureFileFormat::png:
@@ -864,7 +871,7 @@ void AtexApp::write_output_(TextureView view, const Path& path, TextureFileForma
    }
    if (ec) {
       set_status_(status_write_error);
-      log_exception(fs::filesystem_error("Could not write output texture!", path, ec));
+      log_exception(fs::filesystem_error("Error writing output texture!", path, ec));
    }
 }
 
