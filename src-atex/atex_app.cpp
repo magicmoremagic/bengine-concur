@@ -748,6 +748,8 @@ void AtexApp::write_outputs_(TextureView view) {
             file.file_format = TextureFileFormat::png;
          } else if (".tga" == ext) {
             file.file_format = TextureFileFormat::tga;
+         } else if (".jpg" == ext || ".jpeg" == ext) {
+            file.file_format = TextureFileFormat::jpeg;
          } else if (".bmp" == ext || ".dib" == ext) {
             file.file_format = TextureFileFormat::bmp;
          } else if (".hdr" == ext || ".rgbe" == ext || ".pic" == ext) {
@@ -845,7 +847,7 @@ void AtexApp::write_level_images_(TextureView view, output_file_ file) {
 void AtexApp::write_plane_images_(TextureView view, output_file_ file) {
    I32 depth = view.image().dim().z;
    if (depth <= 1) {
-      write_output_(view, file.path, file.file_format, file.byte_order, file.payload_compression);
+      write_output_(view, file.path, file.file_format, file.byte_order, file.payload_compression, 0);
    } else {
       Path parent_path = file.path.parent_path();
       S base = file.path.stem().string() + "-z";
