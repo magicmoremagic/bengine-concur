@@ -866,6 +866,15 @@ void AtexApp::write_output_(TextureView view, const Path& path, TextureFileForma
 
    be_short_info() << "Writing " << format << " texture file: " << path.string() | default_log();
 
+   
+      if (fs::exists(path) && !overwrite_output_files_) {
+         set_status_(status_write_error);
+         be_error() << "Skipping ouput file: file already exists; use --overwrite to ignore."
+            & attr(ids::log_attr_output_path) << path.string()
+            | default_log();
+         return;
+      }
+
    switch (format) {
       case TextureFileFormat::betx:
       {
