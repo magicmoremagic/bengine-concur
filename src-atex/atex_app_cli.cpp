@@ -62,10 +62,9 @@ AtexApp::AtexApp(int argc, char** argv) {
                              "will also be overridden.  Alignment is specified as a base-2 exponent; the actual alignment is (1 << " << fg_cyan << "BITS" << reset << ").").verbose())
 
          (summary (Cell() << "Supported input texture file types: " << fg_green << "beTx"
-                          << fg_dark_gray << ", " << fg_green << "DDS"
+                          //<< fg_dark_gray << ", " << fg_green << "DDS"
                           << fg_dark_gray << ", " << fg_green << "KTX").verbose())
-         (summary (Cell() << "Supported input image file types: " << fg_green << "glRaw"
-                          << fg_dark_gray << ", " << fg_green << "PNG"
+         (summary (Cell() << "Supported input image file types: " << fg_green << "PNG"
                           << fg_dark_gray << ", " << fg_green << "Targa"
                           << fg_dark_gray << ", " << fg_green << "Radiance RGBE"
                           << fg_dark_gray << ", " << fg_green << "PPM"
@@ -75,12 +74,13 @@ AtexApp::AtexApp(int argc, char** argv) {
                           << fg_dark_gray << ", " << fg_green << "GIF").verbose())
 
          (summary (Cell() << "Supported output texture file types: " << fg_green << "beTx"
-                          << fg_dark_gray << ", " << fg_green << "DDS"
+                          //<< fg_dark_gray << ", " << fg_green << "DDS"
                           << fg_dark_gray << ", " << fg_green << "KTX").verbose())
          (summary (Cell() << "Supported output image file types: " << fg_green << "PNG"
                           << fg_dark_gray << ", " << fg_green << "Targa"
                           << fg_dark_gray << ", " << fg_green << "Radiance RGBE"
-                          << fg_dark_gray << ", " << fg_green << "DIB").verbose())
+                          << fg_dark_gray << ", " << fg_green << "DIB"
+                          << fg_dark_gray << ", " << fg_green << "JPEG").verbose())
 
          (doc (ids::cli_describe_section_options_compact, Cell() << fg_gray << "INPUT OPTIONS"))
          (doc (ids::cli_describe_section_options_manstyle, Cell() << fg_gray << "INPUT OPTIONS"))
@@ -338,6 +338,7 @@ AtexApp::AtexApp(int argc, char** argv) {
                   case TextureFileFormat::tga:
                   case TextureFileFormat::hdr:
                   case TextureFileFormat::bmp:
+                  case TextureFileFormat::jpeg:
                      return true;
                   default:
                      return false;
@@ -376,7 +377,11 @@ AtexApp::AtexApp(int argc, char** argv) {
                                      "and it applies to all outputs, including those specified earlier on the command line."))
 
          (flag ({ "F" }, { "overwrite" }, overwrite_output_files_)
-            .desc("Overwrites output files that already exist."))
+            .desc("Overwrite output files that already exist."))
+
+         (numeric_param<int> ({ "Q" }, { "jpeg-quality" }, "Q", jpeg_quality_, 1, 100)
+            .desc("Specifies the quality level to use when writing JPEG files.")
+            .extra("Applies to all output JPEG files.  If set multiple times, only the last specified value is meaningful."))
 
          (verbosity_param ({ "v" },{ "verbosity" }, "LEVEL", default_log().verbosity_mask()))
 

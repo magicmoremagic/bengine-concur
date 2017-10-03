@@ -110,7 +110,8 @@ private:
    void write_layer_images_(gfx::tex::TextureView view, output_file_ file);
    void write_face_images_(gfx::tex::TextureView view, output_file_ file);
    void write_level_images_(gfx::tex::TextureView view, output_file_ file);
-   void write_output_(gfx::tex::TextureView view, const Path& path, gfx::tex::TextureFileFormat format, ByteOrderType byte_order, bool payload_compression);
+   void write_plane_images_(gfx::tex::TextureView view, output_file_ file);
+   void write_output_(gfx::tex::TextureView view, const Path& path, gfx::tex::TextureFileFormat format, ByteOrderType byte_order, bool payload_compression, I32 depth = -1);
 
    CoreInitLifecycle init_;
    I8 status_ = 0;
@@ -144,6 +145,7 @@ private:
    Path output_path_base_;
    std::vector<output_file_> output_files_;
    bool overwrite_output_files_ = false;
+   int jpeg_quality_ = 70;
 };
 
 } // be::atex

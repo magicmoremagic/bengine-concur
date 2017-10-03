@@ -12,6 +12,11 @@
 #include <be/gfx/tex/blit_pixels.hpp>
 #include <be/gfx/tex/betx_writer.hpp>
 #include <be/gfx/tex/ktx_writer.hpp>
+#include <be/gfx/tex/bmp_writer.hpp>
+#include <be/gfx/tex/hdr_writer.hpp>
+#include <be/gfx/tex/jpeg_writer.hpp>
+#include <be/gfx/tex/png_writer.hpp>
+#include <be/gfx/tex/tga_writer.hpp>
 #include <map>
 
 namespace be::atex {
@@ -179,6 +184,12 @@ const std::regex& face_regex() {
 ///////////////////////////////////////////////////////////////////////////////
 const std::regex& level_regex() {
    static std::regex re("-(?:m|level)(\\d+)", std::regex_constants::icase);
+   return re;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+const std::regex& depth_regex() {
+   static std::regex re("-(?:z|depth)(\\d+)", std::regex_constants::icase);
    return re;
 }
 
@@ -740,7 +751,6 @@ void AtexApp::write_outputs_(TextureView view) {
          } else if (".bmp" == ext || ".dib" == ext) {
             file.file_format = TextureFileFormat::bmp;
          } else if (".hdr" == ext || ".rgbe" == ext || ".pic" == ext) {
-            // .pic is used for both radiance and softimage.  Since we can't write softimage we'll assume it means radiance here
             file.file_format = TextureFileFormat::hdr;
          }
       }
@@ -813,7 +823,7 @@ void AtexApp::write_face_images_(TextureView view, output_file_ file) {
 ///////////////////////////////////////////////////////////////////////////////
 void AtexApp::write_level_images_(TextureView view, output_file_ file) {
    if (view.levels() <= 1) {
-      write_output_(view, file.path, file.file_format, file.byte_order, file.payload_compression);
+      write_plane_images_(view, std::move(file));
    } else {
       Path parent_path = file.path.parent_path();
       S base = file.path.stem().string() + "-level";
@@ -826,13 +836,30 @@ void AtexApp::write_level_images_(TextureView view, output_file_ file) {
                                               view.base_layer(), view.layers(),
                                               view.base_face(), view.faces(),
                                               level, 1);
-         write_output_(level_view, file.path, file.file_format, file.byte_order, file.payload_compression);
+         write_plane_images_(level_view, file);
       }
    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void AtexApp::write_output_(TextureView view, const Path& path, TextureFileFormat format, ByteOrderType byte_order, bool payload_compression) {
+void AtexApp::write_plane_images_(TextureView view, output_file_ file) {
+   I32 depth = view.image().dim().z;
+   if (depth <= 1) {
+      write_output_(view, file.path, file.file_format, file.byte_order, file.payload_compression);
+   } else {
+      Path parent_path = file.path.parent_path();
+      S base = file.path.stem().string() + "-z";
+      S ext = file.path.extension().string();
+
+      for (I32 z = 0; z < depth; ++z) {
+         file.path = parent_path / Path(base + std::to_string((std::size_t)z) + ext);
+         write_output_(view, file.path, file.file_format, file.byte_order, file.payload_compression, z);
+      }
+   }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+void AtexApp::write_output_(TextureView view, const Path& path, TextureFileFormat format, ByteOrderType byte_order, bool payload_compression, I32 depth) {
    std::error_code ec;
 
    be_short_info() << "Writing " << format << " texture file: " << path.string() | default_log();
@@ -855,15 +882,44 @@ void AtexApp::write_output_(TextureView view, const Path& path, TextureFileForma
          writer.write(path, ec);
          break;
       }
-      case TextureFileFormat::dds:
-         // TODO
       case TextureFileFormat::png:
-         // TODO
+      {
+         PngWriter writer;
+         writer.image(view.image(), depth);
+         writer.write(path, ec);
+         break;
+      }
       case TextureFileFormat::tga:
-         // TODO
+      {
+         TgaWriter writer;
+         writer.image(view.image(), depth);
+         writer.use_rle(payload_compression);
+         writer.write(path, ec);
+         break;
+      }
       case TextureFileFormat::bmp:
-         // TODO
+      {
+         BmpWriter writer;
+         writer.image(view.image(), depth);
+         writer.write(path, ec);
+         break;
+      }
       case TextureFileFormat::hdr:
+      {
+         HdrWriter writer;
+         writer.image(view.image(), depth);
+         writer.write(path, ec);
+         break;
+      }
+      case TextureFileFormat::jpeg:
+      {
+         JpegWriter writer;
+         writer.image(view.image(), depth);
+         writer.quality(jpeg_quality_);
+         writer.write(path, ec);
+         break;
+      }
+      case TextureFileFormat::dds:
          // TODO
       default:
          ec = std::make_error_code(std::errc::not_supported);
